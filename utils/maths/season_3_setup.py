@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import math
+from bson.int64 import Int64
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -57,7 +58,7 @@ with open(filename, "r", encoding="utf-8") as file:
 
         s3_player = {
             "name": s2_player.get("name"),
-            "discord_id": int(s2_player.get("discord")),
+            "discord_id": Int64(s2_player.get("discord")),
             "mmr": max(s3_player_mmr, 2000),
             "history": [],
         }
