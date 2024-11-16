@@ -44,10 +44,12 @@ class managing(commands.Cog):
         if player_profile in ctx.mogi.players:
             return await ctx.respond("Player is already in the mogi", ephemeral=True)
 
-        ctx.mogi.players.append(ctx.user)
-        await ctx.respond(f"{ctx.user.mention} joined the mogi! (against their will)")
+        ctx.mogi.players.append(player_profile)
+        await ctx.respond(
+            f"<@{player_profile.discord_id}> joined the mogi! (against their will)"
+        )
 
-    @manage.command(name="remove")
+    @manage.command(name="remove", description="Remove a player from the current mogi")
     @is_mogi_not_in_progress()
     @is_mogi_manager()
     async def remove(
@@ -69,7 +71,9 @@ class managing(commands.Cog):
             allowed_mentions=AllowedMentions.none(),
         )
 
-    @replacement.command(name="sub")
+    @replacement.command(
+        name="sub", description="Substitute a player who can't play anymore."
+    )
     @is_mogi_in_progress()
     @is_mogi_manager()
     async def sub(

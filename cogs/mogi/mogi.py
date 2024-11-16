@@ -19,7 +19,7 @@ class mogi(commands.Cog):
         except ValueError:
             await ctx.respond("A Mogi for this channel is already open.")
 
-    @slash_command(name="close", description="Close a mogi")
+    @slash_command(name="close", description="Close this channel's mogi")
     @is_mogi_not_in_progress()
     async def close(self, ctx: MogiApplicationContext):
         await ctx.interaction.response.defer()
@@ -29,7 +29,12 @@ class mogi(commands.Cog):
         )
 
         if await confirmation(ctx, close_confirm_message):
-            mogi_manager.destroy_mogi(ctx.channel.id)
+            for player in ctx.mogi.players:
+                await (await ctx.guild.fetch_member(player.discord_id)).remove_roles(
+                    ctx.inmogi_role
+                )
+
+            mogi_manager.destroy_mogi(ctx.mogi.channel_id)
             return await ctx.respond("# This channel's Mogi has been closed.")
 
         await ctx.respond("Cancelled.")
